@@ -151,6 +151,65 @@ framework.DecrementMetric("registration_success_rate_single_slice", map[string]s
     http://localhost:9091/metrics 
 ```
 
+## Quick Start
+```bash
+package main
+
+import (
+    "log"
+    "amantya_metrics/metrics_wrapper"
+)
+
+func main() {
+    // 1. Initialize the framework
+    framework, err := metrics_wrapper.MetricsType("prometheus", nil)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    // 2. load the KPI config 
+    if err := framework.LoadKPIs("kpi.json"); err != nil {
+        log.Fatal(err)
+    }
+
+    // 3. Register the Metric
+    if err := framework.RegisterMetrics(); err != nil {
+        log.Fatal(err)
+    }
+
+    // 4. Initialize the Default (Optional)
+    if err := framework.InitializeDefaults(); err != nil {
+        log.Fatal(err)
+    }
+
+    // 5. Metrics update operations (demo)
+    framework.IncrementMetric("mean_registered_subscribers_amf", map[string]string{
+        "NetworkSlice": "slice1",
+        "Network":      "net1",
+    })
+    framework.AddToMetric("registered_subscribers_udm", 5, map[string]string{
+        "Network": "net1",
+    })
+    framework.SetMetric("registration_success_rate_single_slice", 95.5, map[string]string{
+        "NetworkSlice": "slice1",
+    })
+    framework.DecrementMetric("registration_success_rate_single_slice", map[string]string{
+        "NetworkSlice": "slice1",
+    })
+
+    // 6. list all registered metrics (optional)
+    for _, name := range framework.ListMetrics() {
+        log.Println("Metric:", name)
+    }
+
+    // 7. push to Pushgateway
+    if err := framework.PushMetrics("http://localhost:9091", "my_job"); err != nil {
+        log.Fatal(err)
+    }
+}
+
+```
+
 ## Author
 
 Amantya
