@@ -36,9 +36,11 @@ To install and run the project locally, follow these steps:
    git clone https://github.com/your-username/your-repository.git
 
 2. **Navigate to the project folder:**
+    ```bash
     cd your-repository
 
 3. **Install dependencies:**
+    ```bash
     go mod tidy
 
 4. **Configure Prometheus:**
@@ -46,9 +48,9 @@ To install and run the project locally, follow these steps:
 
 ### Run
 
-\`\`\`bash
+`
 go run main.go
-\`\`\`
+`
 
 ## Project Structure
 
