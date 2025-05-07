@@ -105,4 +105,13 @@ framework.DecrementMetric("registration_success_rate_single_slice", map[string]s
 
 ## Push Output
 ```bash 
-    http://localhost:9091/metrics
+    http://localhost:9091/metrics 
+```
+
+## Author
+
+Your Name – GitHub
+
+## License
+
+This project is licensed under the MIT License.
