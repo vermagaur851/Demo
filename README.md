@@ -1,4 +1,4 @@
-# Amantya Metrics Framework
+# Amantya Metrics Framework (Version v1.0.0)
 
 The **Amantya Metrics Framework** is a modular, backend-agnostic metric management system built in **Go**. It simplifies the registration, management, and interaction with various types of metrics such as **Counters** and **Gauges**, and supports seamless integration with observability backends like **Prometheus** and **Datadog**.
 
@@ -43,28 +43,13 @@ Make sure you have the following installed:
 
 ### Installation
 
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
-
-2. **Install Go dependencies:**
-    ```bash
-    go mod tidy
-    ```
-
-3. **Run Prometheus Pushgateway (if not already running):**
-
-    ```bash
-    docker run -d -p 9091:9091 prom/pushgateway
-    ```
-
-## **Run the Application**
-
-    ```bash
-    go run main.go
-    ```
+**Clone the repository:**
+   ```path
+   https://bitbucket.org/amantyatech/cg_5gc/src/integration/5gCN/common/goCommon/src/amantya_metrics
+   ```
+ 
+**Configure Prometheus:**
+    If you are using Prometheus for metrics, make sure it's running and properly configured to collect data from your project. You can follow the Prometheus setup guide if it's not set up yet.
 
 This will:
 
@@ -76,20 +61,51 @@ This will:
 
 - Push metrics to Prometheus PushGateway (http://localhost:9091)
 
+## Prject structure 
+``` bash
+AMANTYA_METRICS/
+├── build/
+├── datadogbackend/
+├── lang_wrapper/
+├── metricsInterface/
+├── metricsregistry/
+├── models/
+├── prometheusbackend/
+├── service/
+├── utils/              
+├── Makefile
+├── go.mod / go.sum
+└── README.md
+```
+
 ## Sample KPI Configuration (kpi.json)
 ```bash
 [
   {
-    "name": "registration_success_rate_single_slice",
-    "type": "gauge",
-    "help": "Success rate of registrations per network slice",
-    "labels": ["NetworkSlice"]
+    "name": "mean_registered_subscribers_amf",
+    "displayName": "Mean Registered Subscribers (AMF)",
+    "description": "Average number of registered subscribers in the network and network slice handled by AMF.",
+    "formula": "Sum of registered subscribers / Observation period",
+    "unit": "Count",
+    "type": "Mean",
+    "object": ["NetworkSlice", "Network"],
+    "prometheus_type": "Counter",
+    "nf_type": "AMF",
+    "increment": true,
+    "decrement": false
   },
   {
-    "name": "registered_subscribers_udm",
-    "type": "counter",
-    "help": "Total registered subscribers in UDM",
-    "labels": ["Network"]
+    "name": "registration_success_rate_single_slice",
+    "displayName": "Registration Success Rate (Single Slice)",
+    "description": "Success rate of user equipment (UE) registration for a single network slice.",
+    "formula": "(Number of successful registrations / Total number of registrations) * 100",
+    "unit": "%",
+    "type": "SuccessRate",
+    "object": ["NetworkSlice"],
+    "prometheus_type": "Gauge",
+    "nf_type": "AMF",
+    "increment": true,
+    "decrement": true
   }
 ]
 ```
@@ -103,6 +119,33 @@ framework.SetMetric("registration_success_rate_single_slice", 95.5, map[string]s
 framework.DecrementMetric("registration_success_rate_single_slice", map[string]string{"NetworkSlice": "slice1"})
 ```
 
+## 🧰 API Reference
+- RegisterMetrics()
+    Registers all metrics defined in your KPI configuration.
+    Example:
+    framework.RegisterMetrics()
+
+- GetMetric(name string)
+    Retrieves a previously registered metric by its name. Returns the metric object (or an error if not found).
+    Example:
+    metric, err := framework.GetMetric("api_requests")
+
+- ListMetrics() []string
+    Returns a slice of all registered metric names.
+    Example:
+    metrics := framework.ListMetrics()
+
+- UnregisterMetric(name string)
+    Removes/unregisters the metric with the given name.
+    Example:
+    framework.UnregisterMetric("old_metric")
+
+- PushMetrics(gatewayURL, jobName string)
+    Pushes all current metric values to a Prometheus PushGateway at the specified URL under the given job name.
+    Example:
+    framework.PushMetrics("http://pushgateway:9091", "my_job")
+
+
 ## Push Output
 ```bash 
     http://localhost:9091/metrics 
@@ -110,7 +153,7 @@ framework.DecrementMetric("registration_success_rate_single_slice", map[string]s
 
 ## Author
 
-Your Name – GitHub
+Amantya
 
 ## License
 
