@@ -1,0 +1,28 @@
+[
+  {
+    "name": "mean_registered_subscribers_amf",
+    "displayName": "Mean Registered Subscribers (AMF)",
+    "description": "Average number of registered subscribers in the network and network slice handled by AMF.",
+    "formula": "Sum of registered subscribers / Observation period",
+    "unit": "Count",
+    "type": "Mean",
+    "object": ["NetworkSlice", "Network"],
+    "prometheus_type": "Counter",
+    "nf_type": "AMF",
+    "increment": true,
+    "decrement": false
+  },
+  {
+    "name": "registration_success_rate_single_slice",
+    "displayName": "Registration Success Rate (Single Slice)",
+    "description": "Success rate of user equipment (UE) registration for a single network slice.",
+    "formula": "(Number of successful registrations / Total number of registrations) * 100",
+    "unit": "%",
+    "type": "SuccessRate",
+    "object": ["NetworkSlice"],
+    "prometheus_type": "Gauge",
+    "nf_type": "AMF",
+    "increment": true,
+    "decrement": true
+  }
+]
