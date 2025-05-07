@@ -47,10 +47,9 @@ To install and run the project locally, follow these steps:
     If you are using Prometheus for metrics, make sure it's running and properly configured to collect data from your project. You can follow the Prometheus setup guide if it's not set up yet.
 
 ### Run
-
-`
-go run main.go
-`
+    ```
+    go run main.go
+    ```
 
 ## Project Structure
 
