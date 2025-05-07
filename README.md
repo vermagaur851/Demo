@@ -151,7 +151,7 @@ framework.DecrementMetric("registration_success_rate_single_slice", map[string]s
     http://localhost:9091/metrics 
 ```
 
-## Quick Start
+## Sample_test.go
 ```bash
 package main
 
